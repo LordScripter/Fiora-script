@@ -81,17 +81,6 @@ end
 
 OnTick(function(myHero)
 	processObjectList()
-	local buff_pos, distance = getNearestPos()
-	if buff_pos and combo.getValue() and distance > 100 then
-		if CanUseSpell(myHero,_Q) == READY and distance < GetCastRange(myHero,_Q) then
-   		CastSkillShot(_Q,buff_pos)
-   	elseif not canAttack() and canMove() then
-   		canMove(false)
-   		MoveToXYZ(buff_pos)
-   	end
-  else
-  	canMove(true)
-	end
 	if IOW:Mode() == "Combo"  then
 		combo()
 	end
@@ -105,53 +94,6 @@ OnTick(function(myHero)
 	end
 end)
 
-OnDraw(function(myHero)
-	if debug then
-		for _,obj in pairs(buffList) do
-			local origin = GetOrigin(obj)
-			if origin then
-				local distance = passtiveList[GetObjectBaseName(obj)]
-				DrawCircle(origin.x+distance.x,origin.y+distance.y,origin.z,100,0,0,0xffffffff)
-			end
-		end	
-	end
-end)
-
-addResetAASpell(function()
-	if CanUseSpell(myHero,_E) == READY then
-   	CastSpell(_E)
-		return true
-	else
-		return false
-  end
-end)
-
-OnProcessSpellComplete(function(unit, spell)
-  if unit == myHero and spell.name == "FioraE" then
-		resetAA()
-  end
-end)
-
-OnCreateObj(function(object)
-	if passtiveList[GetObjectBaseName(object)] then
-		table.insert(objectList, object)
-	end
-
-	if debug and GetObjectBaseName(object):find("Fiora_Base") and not GetObjectBaseName(object):lower():find("speed")then
-		PrintChat(
-			""..GetObjectBaseName(object).."  "..
-			"IsVisible : "..tostring(IsVisible(object)).."  "..
-			"GetTeam : "..GetTeam(object).."  "..
-			"IsTargetable : "..tostring(IsTargetable(object)).."  "
-			)
-	end
-end)
-
-OnDeleteObj(function(object)
-	if passtiveList[GetObjectBaseName(object)] then
-		buffList[GetNetworkID(object)] = nil
-	end
-end)
 -- Combo
 function combo()
 target = GetCurrentTarget()
