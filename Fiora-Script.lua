@@ -1,47 +1,79 @@
--- Script for fiora
--- Combo: Q to mouse, AA, E(reset AA), Hydra/Tiamat, AA
+-- Description: Q's to mouse position then uses AA , E , Hydra , AA on champion target
+
 local myHero = GetMyHero()
 if GetObjectName(myHero) ~= "Fiora" then return end
---vars
+-- define variables
 local target
-local timerOld, timerNew, AAReady, as = 0, 0, 0, 0
---always updates
+local timerold,timernew, AAREADY,cAS = 0,0,0,0
+local usedQ, usedAA1, usedE, usedAA2, usedHydra, usedAA3 = 0,0,0,0,0,0
+-- perma refreshed
 OnTick(function(myHero)
-  if IOW:Mode() == "Combo" then combo() end
-  as = GetAttackSpeed(myHero) * 0.69
-  timerNew = GetTickCount()
-  lastAA = timerNew - timerOld
-  if lastAA > (1/as) * 1000
-    then AAReady = 1
-  end
-end
--- combo function
+	if IOW:Mode() == "Combo"  then
+		combo()
+	else
+		usedQ, usedAA1, usedE, usedAA2, usedHydra, usedAA3 = 0,0,0,0,0,0
+	end
+	cAS = GetAttackSpeed( GetMyHero() ) * 0.69
+	timernew = GetTickCount()
+	lastAA = timerold - timernew
+	
+	if -lastAA > (1/ cAS ) * 1000 then
+		AAREADY = 1
+	end
+end)
+-- Combo
 function combo()
-  target = GetCurrentTarget()
-  castQ()
-  if AAReady and CanUseSpell(myHero,_Q) ~= READY then
-    AttackUnit(target) end
-  if ~AAReady then
-    CastE()
-    AttackUnit(target)
-  end
-  if CanUseSpell(myHero,_E)~=READY then
-    CastOffensiveItems(target)
-  end
-  if AAReady and CanUseSpell(myHero,_E)~=READY then
-    AttackUnit(target)
-  end
-end
+target = GetCurrentTarget()
+
+			if usedQ == 0 then
+				castQ()
+				usedQ = 1
+				return
+			end
+			
+			if usedAA1 == 0 then
+				AttackUnit(target)
+				usedAA1 = 1
+				return
+			end
+			
+			if usedE == 0 then
+				castE()
+				usedE = 1
+				return
+			end
+			
+			if usedAA2 then
+				AttackUnit(target)
+				usedAA2 = 1
+				return
+			end
+	
+			if usedHydra == 0 then
+				CastOffensiveItems(target)
+				usedHydra = 1
+				return
+			end
+			
+			if usedAA3 == 0 then
+				AttackUnit(target)
+				usedAA3 = 1
+				return
+			end
+
+		end
 
 function castQ()
-  if Ready(_Q) then
-    CastSkilShot(_Q, GetMousePos())
-  end
+	if Ready(_Q) then
+		CastSkillShot(_Q, GetMousePos())
+	end
+end
 
 function castE()
-  if Ready(_E) then
-      CastSpell(_E)
-  end
+	if Ready(_E) then
+		CastSpell(_E)
+	end
+end
 
 OnProcessSpellComplete(function(Object,Spell)
 	if Object == GetMyHero() then
@@ -50,4 +82,5 @@ OnProcessSpellComplete(function(Object,Spell)
 	end
 end)
 
-PrintChat("Fiora Script Loaded")
+PrintChat("simple Fiora Combo loaded.")
+
