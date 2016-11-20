@@ -53,7 +53,7 @@ target = GetCurrentTarget()
 				return
 			end
 	
-			if AAREADY == 0 and usedHydra == 0 then
+			if usedHydra == 0 then
 				CastOffensiveItems(target)
 				usedHydra = 1
 				usedAA3 = 0
