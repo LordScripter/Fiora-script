@@ -5,7 +5,7 @@ if GetObjectName(myHero) ~= "Fiora" then return end
 --vars
 local target
 local timerOld, timerNew, AAReady, as = 0, 0, 0, 0
-
+--always updates
 OnTick(function(myHero)
   if IOW:Mode() == "Combo" then combo() end
   as = GetAttackSpeed(myHero) * 0.69
@@ -15,7 +15,7 @@ OnTick(function(myHero)
     then AAReady = 1
   end
 end
-
+-- combo function
 function combo()
   target = GetCurrentTarget()
   castQ()
