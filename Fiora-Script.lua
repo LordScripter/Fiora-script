@@ -1,0 +1,2 @@
+-- Script for fiora
+-- Combo: Q to mouse, AA, E(reset AA), Hydra/Tiamat, AA
