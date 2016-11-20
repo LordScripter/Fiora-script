@@ -14,20 +14,6 @@ end)
 -- define variables
 local target
 local timerold,timernew, AAREADY,cAS = 0,0,0,0
--- menu
-if not FileExist(COMMON_PATH.. "Analytics.lua") then
-  DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Analytics.lua", COMMON_PATH .. "Analytics.lua", function() end)
-end
-
-require("Analytics")
-
-Analytics("Eternal Akali", "Toshibiotro")
-
-local fioraMenu = Menu("Fiora","Fiora")
-fioraMenu:SubMenu("Combo","Combo")
-fioraMenu.Combo:Boolean("doCombo","doCombo", true)
-fioraMenu:SubMenu("AntiCC","AntiCC")
-fioraMenu.AntiCC:Boolean("AntiCC","AntiCC",true)
 -- perma refreshed
 OnTick(function(myHero)
 	if IOW:Mode() == "Combo" and doCombo == true then
