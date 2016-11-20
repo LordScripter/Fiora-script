@@ -5,13 +5,13 @@ if GetObjectName(myHero) ~= "Fiora" then return end
 -- define variables
 local target
 local timerold,timernew, AAREADY,cAS = 0,0,0,0
-local usedQ, usedAA1, usedE, usedAA2, usedHydra, usedAA3 = 0,0,0,0,0,0
+local usedQ, usedAA1, usedE, usedAA2, usedHydra, usedAA3 = 0,1,1,1,1,1
 -- perma refreshed
 OnTick(function(myHero)
 	if IOW:Mode() == "Combo"  then
 		combo()
 	else
-		usedQ, usedAA1, usedE, usedAA2, usedHydra, usedAA3 = 0,0,0,0,0,0
+		usedQ, usedAA1, usedE, usedAA2, usedHydra, usedAA3 = 0,1,1,1,1,1
 	end
 	cAS = GetAttackSpeed( GetMyHero() ) * 0.69
 	timernew = GetTickCount()
@@ -28,34 +28,39 @@ target = GetCurrentTarget()
 			if usedQ == 0 then
 				castQ()
 				usedQ = 1
+				usedAA1 = 0
 				return
 			end
 			
-			if usedAA1 == 0 then
+			if AAREADY == 1 and usedAA1 == 0 then
 				AttackUnit(target)
 				usedAA1 = 1
+				usedE = 0
 				return
 			end
 			
-			if usedE == 0 then
+			if AAREADY == 0 and usedE == 0 then
 				castE()
 				usedE = 1
+				usedAA2 = 0
 				return
 			end
 			
-			if usedAA2 then
+			if AAREADY == 1 and usedAA2 == 0 then
 				AttackUnit(target)
 				usedAA2 = 1
+				usedHydra = 0
 				return
 			end
 	
-			if usedHydra == 0 then
+			if AAREADY == 0 and usedHydra == 0 then
 				CastOffensiveItems(target)
 				usedHydra = 1
+				usedAA3 = 0
 				return
 			end
 			
-			if usedAA3 == 0 then
+			if AAREADY == 1 and usedAA3 == 0 then
 				AttackUnit(target)
 				usedAA3 = 1
 				return
